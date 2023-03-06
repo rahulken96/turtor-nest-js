@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FilekitaModule } from './filekita/filekita.module';
+import { FileKita } from "./filekita/filekita.entity";
+import { DataSource } from "typeorm";
 import 'dotenv/config';
 
 @Module({
@@ -14,13 +17,16 @@ import 'dotenv/config';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: ['src/**/*.entity.ts','dist/**/*.entity.js'],
       synchronize: true,
       dropSchema: false,
       logging: true,
+      entities: [FileKita],
     }),
+    FilekitaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
