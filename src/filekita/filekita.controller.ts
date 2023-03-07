@@ -1,32 +1,53 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Patch, Delete } from '@nestjs/common';
+import { FileKitaDTO } from './dto/filekita.dto';
 import { FilekitaService } from "./filekita.service";
 
 @Controller('filekita')
 export class FilekitaController {
-    constructor(private FilekitaService: FilekitaService){}
-
-    /*----- Latihan Function CRUD -----*/
+    constructor(private FilekitaService: FilekitaService) { }
     @Get('service')
-    getService(){
+    getService() {
         return this.FilekitaService.lihatService();
     }
 
+    /*----- Latihan Function CRUD -----*/
     /* Function Get yang memanggil function yang berada di filekita.service, yang berfungsi menampilkan data (show) */
     @Get()
-    show(){
-        return this.FilekitaService.lihatSemua();
+    show() {
+        return this.FilekitaService.lihatSemua(); //Index
     }
-    
+
+    @Post()
+    store(@Body() data: FileKitaDTO) {
+        return this.FilekitaService.create(data); //Create Data
+    }
+
+    @Get(':id')
+    read(@Param('id') id: number) {
+        return this.FilekitaService.read(id); //Read Data
+    }
+
+    @Patch(':id')
+    update(@Param('id') id: number, @Body() data: Partial<FileKitaDTO>) {
+        return this.FilekitaService.edit(id, data); //Update Data
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id: number) {
+        return this.FilekitaService.delete(id); //Update Data
+    }
+
+
     /*----- Latihan Function Biasa -----*/
     /* Function Get biasa dengan tipe data String */
     @Get()
-    lihatOutput(): string{
+    lihatOutput(): string {
         return 'controller FileKita';
     }
 
     /* Function Get tipe data String dengan ID, yg dimana diinisial kn menjadi userID dengan tipe data String */
     @Get(':id')
-    lihatDetail(@Param('id') userID: string): string{
+    lihatDetail(@Param('id') userID: string): string {
         return `controller FileKita/Detil dengan id: ${userID}`;
     }
 }

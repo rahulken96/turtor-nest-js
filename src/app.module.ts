@@ -3,8 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilekitaModule } from './filekita/filekita.module';
-import { FileKita } from "./filekita/filekita.entity";
+import { FileKita } from "./filekita/entities/filekita.entity";
 import { DataSource } from "typeorm";
+import { ContohFileResourceModule } from './contoh-file-resource/contoh-file-resource.module';
 import 'dotenv/config';
 
 @Module({
@@ -23,6 +24,7 @@ import 'dotenv/config';
       entities: [FileKita],
     }),
     FilekitaModule,
+    ContohFileResourceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
