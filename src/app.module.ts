@@ -5,8 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilekitaModule } from './filekita/filekita.module';
 import { FileKita } from "./filekita/entities/filekita.entity";
 import { DataSource } from "typeorm";
-import { ContohFileResourceModule } from './contoh-file-resource/contoh-file-resource.module';
 import 'dotenv/config';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpErrorFilter } from './shared/http-error.filter';
 
 @Module({
   imports: [
@@ -24,10 +25,15 @@ import 'dotenv/config';
       entities: [FileKita],
     }),
     FilekitaModule,
-    ContohFileResourceModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService, { 
+      /* Penambahan Custom Error dari class HttpErrorFilter yang telah dibuat. */
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter,
+    }
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
