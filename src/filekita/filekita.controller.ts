@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Patch, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Patch, Delete, Render } from '@nestjs/common';
 import { FileKitaDTO } from './dto/filekita.dto';
 import { FilekitaService } from "./filekita.service";
 
@@ -12,9 +12,9 @@ export class FilekitaController {
 
     /*----- Latihan Function CRUD -----*/
     /* Function Get yang memanggil function yang berada di filekita.service, yang berfungsi menampilkan data (show) */
-    @Get()
-    show() {
-        return this.FilekitaService.lihatSemua(); //Index
+    @Get('jsondata')
+    async show() {
+        return { data: await this.FilekitaService.lihatSemua() }; //Index
     }
 
     @Post()
@@ -35,6 +35,14 @@ export class FilekitaController {
     @Delete(':id')
     delete(@Param('id') id: number) {
         return this.FilekitaService.delete(id); //Update Data
+    }
+
+
+    /*---- Funtion untuk view menggunakan format .hbs ---*/
+    @Get()
+    @Render('filekita/index')
+    root() {
+        return { message: `Halo NestJs HEHHE`, title: `Turtor NestJS`, data: this.FilekitaService.lihatSemua() };
     }
 
 
